@@ -250,6 +250,66 @@ body {
   border-left: 4px solid #38bdf8;
 }
 
+/* TARJETA RETRO TOOLTIP POKÉDEX (ENDPOINT 2 /POKEMON-SPECIES) */
+.rival-area, .player-area, .game-hp-box {
+  position: relative;
+}
+
+.pokedex-tooltip {
+  position: absolute;
+  z-index: 120;
+  width: 250px;
+  background: rgba(8, 12, 22, 0.96);
+  border: 2px solid #38bdf8;
+  border-radius: 12px;
+  padding: 0.75rem 0.9rem;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.95), 0 0 20px rgba(56, 189, 248, 0.4);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(12px);
+}
+
+/* Tooltip para el rival (despliega abajo a la izquierda) */
+.rival-hp-box .pokedex-tooltip {
+  top: 110%;
+  left: 0;
+}
+
+/* Tooltip para el jugador (despliega arriba a la derecha) */
+.player-hp-box .pokedex-tooltip {
+  bottom: 110%;
+  right: 0;
+}
+
+.game-hp-box:hover .pokedex-tooltip {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.pokedex-tooltip .tooltip-header {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.6rem;
+  color: #f59e0b;
+  margin-bottom: 0.4rem;
+  border-bottom: 1px dashed rgba(245, 158, 11, 0.4);
+  padding-bottom: 0.35rem;
+}
+
+.pokedex-tooltip .tooltip-desc {
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.78rem;
+  color: #e2e8f0;
+  line-height: 1.4;
+  font-weight: 600;
+  margin: 0;
+}
+
 .hp-box-top {
   display: flex;
   align-items: center;
