@@ -1,0 +1,1406 @@
+/**
+ * ============================================================================
+ * ESTILOS CSS - POKÉMON BATTLE SIMULATOR (ESTILO VIDEOJUEGO CLÁSICO & WOW)
+ * ============================================================================
+ */
+
+:root {
+  --bg-primary: #0b0f19;
+  --bg-secondary: #131a2a;
+  --glass-bg: rgba(23, 31, 48, 0.78);
+  --glass-border: rgba(255, 255, 255, 0.15);
+  
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-accent: #38bdf8;
+
+  --accent-color: #3b82f6;
+  --danger-color: #ef4444;
+  --success-color: #10b981;
+  --warning-color: #f59e0b;
+
+  --card-radius: 16px;
+  --transition-fast: 0.2s ease;
+  --transition-smooth: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: 'Outfit', -apple-system, sans-serif;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+  padding: 1rem;
+}
+
+/* Efectos de luces de fondo */
+.bg-glow {
+  position: fixed;
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  filter: blur(140px);
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.35;
+}
+.bg-glow-1 {
+  background: radial-gradient(circle, #3b82f6 0%, transparent 70%);
+  top: -100px; left: -100px;
+}
+.bg-glow-2 {
+  background: radial-gradient(circle, #f43f5e 0%, transparent 70%);
+  bottom: -150px; right: -100px;
+}
+
+.container {
+  max-width: 1080px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+/* Glassmorphism común */
+.glass-card {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-radius: var(--card-radius);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+}
+
+/* ============================================================================
+ * 1. BARRA SUPERIOR DE CONFIGURACIÓN (SETUP TOPBAR)
+ * ============================================================================ */
+.game-topbar {
+  padding: 0.85rem 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.badge-title {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.65rem;
+  background: rgba(56, 189, 248, 0.15);
+  color: var(--text-accent);
+  padding: 0.4rem 0.75rem;
+  border-radius: 99px;
+  border: 1px solid rgba(56, 189, 248, 0.3);
+}
+
+.setup-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.setup-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.setup-group label {
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: var(--text-secondary);
+}
+
+.setup-group input {
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  padding: 0.45rem 0.7rem;
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 600;
+  width: 130px;
+}
+
+.btn-mini {
+  background: rgba(59, 130, 246, 0.2);
+  border: 1px solid rgba(59, 130, 246, 0.4);
+  color: #60a5fa;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.4rem 0.75rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+.btn-mini:hover {
+  background: rgba(59, 130, 246, 0.4);
+  color: #fff;
+}
+
+.btn-mini-random {
+  background: linear-gradient(135deg, rgba(244, 63, 94, 0.2), rgba(168, 85, 247, 0.2));
+  border: 1px solid rgba(244, 63, 94, 0.4);
+  color: #f43f5e;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.45rem 0.85rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+.btn-mini-random:hover {
+  background: linear-gradient(135deg, rgba(244, 63, 94, 0.4), rgba(168, 85, 247, 0.4));
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.vs-mini {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.65rem;
+  color: #f59e0b;
+}
+
+/* ============================================================================
+ * 2. ESCENARIO DE BATALLA ESTILO VIDEOJUEGO CLÁSICO (STADIUM ARENA)
+ * ============================================================================ */
+.stadium-arena {
+  width: 100%;
+  height: 350px;
+  border-radius: 20px;
+  overflow: hidden;
+  position: relative;
+  border: 2px solid rgba(255, 255, 255, 0.25);
+  box-shadow: inset 0 0 35px rgba(0, 0, 0, 0.45), 0 25px 60px rgba(0, 0, 0, 0.7);
+}
+
+.stadium-bg {
+  width: 100%;
+  height: 100%;
+  background: 
+    linear-gradient(to bottom, rgba(15, 23, 42, 0.15) 0%, rgba(15, 23, 42, 0.05) 50%, rgba(15, 23, 42, 0.35) 100%),
+    url('campo.png') no-repeat center center / cover;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 1rem 1.6rem;
+}
+
+/* RIVAL AREA (Arriba, HP a la izquierda, Pokémon rival más al centro del campo) */
+.rival-area {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0 3%;
+  margin-top: 0;
+}
+
+.rival-stage {
+  margin-right: 18%; /* Desplaza al rival hacia el centro de la arena */
+  transform: translateY(5px);
+}
+
+/* PLAYER AREA (Abajo, Tu Pokémon más al centro del campo, HP a la derecha) */
+.player-area {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0 3%;
+  margin-bottom: 0.2rem;
+}
+
+.player-stage {
+  margin-left: 18%; /* Desplaza a tu Pokémon hacia el centro de la arena */
+  transform: translateY(-18px); /* Subir a tu Pokémon muy hacia arriba para que no se pierda abajo */
+}
+
+/* CAJAS CLÁSICAS DE HP (.game-hp-box) - COMPACTAS */
+.game-hp-box {
+  min-width: 200px;
+  max-width: 230px;
+  padding: 0.45rem 0.75rem;
+  border-radius: 8px;
+  background: rgba(15, 23, 42, 0.88);
+  border: 1.5px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
+}
+
+.rival-hp-box {
+  border-left: 4px solid #f43f5e;
+}
+.player-hp-box {
+  border-left: 4px solid #38bdf8;
+}
+
+.hp-box-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.2rem;
+}
+
+.pkm-name {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.7rem;
+  color: #fff;
+  letter-spacing: 0.3px;
+}
+
+.pkm-lvl {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.58rem;
+  color: #f59e0b;
+}
+
+.types-container {
+  display: flex;
+  gap: 0.25rem;
+  margin-bottom: 0.3rem;
+}
+
+.type-badge {
+  font-size: 0.55rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  padding: 0.1rem 0.35rem;
+  border-radius: 4px;
+  color: #fff;
+}
+.type-fire { background: #ee8130; }
+.type-water { background: #6390f0; }
+.type-grass { background: #7ac74c; }
+.type-electric { background: #f7d02c; color: #1a1a1a; }
+.type-flying { background: #a98ff3; }
+.type-ice { background: #96d9d6; color: #1a1a1a; }
+.type-fighting { background: #c22e28; }
+.type-poison { background: #a33ea1; }
+.type-ground { background: #e2bf65; color: #1a1a1a; }
+.type-psychic { background: #f95587; }
+.type-rock { background: #b6a136; }
+.type-ghost { background: #735797; }
+.type-dragon { background: #6f35fc; }
+.type-dark { background: #705746; }
+.type-steel { background: #b7b7ce; color: #1a1a1a; }
+.type-fairy { background: #d685ad; }
+.type-normal { background: #a8a878; }
+
+.hp-bar-row {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.hp-label {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.5rem;
+  color: #f59e0b;
+  background: #1e293b;
+  padding: 0.1rem 0.3rem;
+  border-radius: 3px;
+}
+
+.hp-bar {
+  flex: 1;
+  height: 9px;
+  border-radius: 99px;
+  overflow: hidden;
+  appearance: none;
+  -webkit-appearance: none;
+}
+.hp-bar::-webkit-progress-bar {
+  background-color: rgba(255, 255, 255, 0.15);
+  border-radius: 99px;
+}
+.hp-bar::-webkit-progress-value {
+  background: linear-gradient(90deg, #10b981, #34d399);
+  border-radius: 99px;
+  transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.hp-bar::-moz-progress-bar {
+  background: linear-gradient(90deg, #10b981, #34d399);
+  border-radius: 99px;
+  transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.hp-bar.hp-medium::-webkit-progress-value {
+  background: linear-gradient(90deg, #f59e0b, #fbbf24);
+}
+.hp-bar.hp-low::-webkit-progress-value {
+  background: linear-gradient(90deg, #ef4444, #f87171);
+}
+
+.hp-numbers-row {
+  text-align: right;
+  margin-top: 0.15rem;
+}
+.hp-numbers {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.58rem;
+  color: #fff;
+}
+
+/* SPRITES EN LA ARENA */
+.sprite-stage {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 185px;
+  height: 165px;
+}
+
+.pokemon-sprite {
+  z-index: 2;
+  filter: none; /* ELIMINADA LA SOMBRA DEL POKÉMON */
+  transition: transform var(--transition-smooth);
+}
+
+.front-sprite {
+  max-height: 165px;
+  max-width: 165px;
+  object-fit: contain;
+  transform: scale(1.4);
+}
+
+.back-sprite {
+  max-height: 175px;
+  max-width: 175px;
+  object-fit: contain;
+  transform: scale(1.45); /* Efecto de proximidad clásica */
+}
+
+/* Animaciones del combate */
+.player-stage .anim-attack { animation: attackLungeRight 0.4s ease; }
+.rival-stage .anim-attack { animation: attackLungeLeft 0.4s ease; }
+.anim-damage { animation: takeDamage 0.5s ease; }
+.anim-heal   { animation: healGlow 0.8s ease; }
+
+@keyframes attackLungeRight {
+  0% { transform: translateX(0) scale(1); }
+  50% { transform: translateX(45px) scale(1.2); }
+  100% { transform: translateX(0) scale(1); }
+}
+
+@keyframes attackLungeLeft {
+  0% { transform: translateX(0) scale(1); }
+  50% { transform: translateX(-45px) scale(1.15); }
+  100% { transform: translateX(0) scale(1); }
+}
+@keyframes takeDamage {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-15px); filter: brightness(2.5) hue-rotate(330deg); }
+  40%, 80% { transform: translateX(15px); filter: brightness(1.8) hue-rotate(330deg); }
+}
+@keyframes healGlow {
+  0%, 100% { transform: scale(1); }
+  50% { filter: drop-shadow(0 0 30px #10b981) brightness(1.4); transform: scale(1.1); }
+}
+
+/* ============================================================================
+ * 3. CAJA DE DIÁLOGO Y COMANDOS ESTILO GAME BOY / NINTENDO
+ * ============================================================================ */
+.game-command-box {
+  width: 100%;
+}
+
+.command-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 1.25rem;
+}
+
+@media (max-width: 850px) {
+  .command-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.dialogue-panel {
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  min-height: 280px;
+}
+
+.dialogue-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.75rem;
+  color: #38bdf8;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 0.6rem;
+}
+
+.log-container {
+  flex: 1;
+  max-height: 220px;
+  overflow-y: auto;
+  padding-right: 0.5rem;
+}
+
+.log-container::-webkit-scrollbar {
+  width: 6px;
+}
+.log-container::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 99px;
+}
+
+.battle-log-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.log-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.75rem 0.95rem;
+  border-radius: 10px;
+  background: rgba(15, 23, 42, 0.6);
+  border-left: 4px solid #38bdf8;
+  font-size: 0.92rem;
+  line-height: 1.45;
+}
+
+.log-time {
+  font-weight: 700;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.log-text {
+  flex: 1;
+  color: #e2e8f0;
+}
+
+.log-item.log-system { border-left-color: #64748b; background: rgba(15, 23, 42, 0.4); }
+.log-item.log-attack { border-left-color: #38bdf8; background: rgba(56, 189, 248, 0.12); }
+.log-item.log-counterattack { border-left-color: #f43f5e; background: rgba(244, 63, 94, 0.12); }
+.log-item.log-heal   { border-left-color: #10b981; background: rgba(16, 185, 129, 0.12); }
+.log-item.log-win    { border-left-color: #f59e0b; background: rgba(245, 158, 11, 0.15); font-weight: 700; color: #fde68a; }
+
+/* MENÚ DE COMANDOS DERECHA */
+.menu-panel {
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.menu-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.menu-tab {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: rgba(15, 23, 42, 0.7);
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  padding: 0.75rem;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.menu-tab input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.menu-tab .tab-icon { font-size: 1.2rem; }
+.menu-tab .tab-label { font-family: 'Press Start 2P', monospace; font-size: 0.65rem; }
+
+.menu-tab.active#tab-attack {
+  background: rgba(239, 68, 68, 0.18);
+  border-color: #ef4444;
+  box-shadow: 0 0 20px rgba(239, 68, 68, 0.3);
+  color: #fca5a5;
+}
+
+.menu-tab.active#tab-heal {
+  background: rgba(16, 185, 129, 0.18);
+  border-color: #10b981;
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+  color: #6ee7b7;
+}
+
+.submenu-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.submenu-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+}
+
+.game-grid-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.6rem;
+}
+
+.game-btn {
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  padding: 0.75rem 0.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.game-btn:hover {
+  background: rgba(56, 189, 248, 0.2);
+  border-color: #38bdf8;
+  transform: translateY(-2px);
+}
+
+.game-btn.selected {
+  background: rgba(59, 130, 246, 0.35);
+  border-color: #3b82f6;
+  box-shadow: 0 0 15px rgba(59, 130, 246, 0.4);
+}
+
+.game-btn:active {
+  transform: translateY(1px) scale(0.97);
+  background: rgba(56, 189, 248, 0.4);
+}
+
+.btn-title {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.62rem;
+  color: #fff;
+}
+
+.btn-sub {
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+}
+
+.custom-input-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-top: 0.25rem;
+}
+.custom-input-row label {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+.custom-input-row input {
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  padding: 0.35rem 0.6rem;
+  color: #fff;
+  font-size: 0.85rem;
+  width: 130px;
+}
+
+/* BOTÓN DE EJECUCIÓN PRINCIPAL */
+.action-submit-row {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.btn-game-execute {
+  flex: 1;
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  padding: 0.95rem 1rem;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.68rem;
+  cursor: pointer;
+  box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+  transition: all var(--transition-fast);
+}
+.btn-game-execute:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(59, 130, 246, 0.6);
+  background: linear-gradient(135deg, #60a5fa, #3b82f6);
+}
+
+.btn-game-reset {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: var(--text-secondary);
+  border-radius: 12px;
+  padding: 0.95rem 1.1rem;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.68rem;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+.btn-game-reset:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+}
+
+.hidden { display: none !important; }
+
+/* ERROR BANNER */
+.error-banner {
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  border-left: 5px solid var(--danger-color);
+  padding: 1rem;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.error-banner.hidden { display: none; }
+.error-content strong { color: #fca5a5; font-size: 0.95rem; }
+.error-content p { color: #fff; font-size: 0.85rem; }
+.close-error-btn { background: none; border: none; color: #fca5a5; font-size: 1.5rem; cursor: pointer; }
+
+/* ============================================================================
+ * 4. MINI MODAL RETRO: VICTORIA / DERROTA Y NUEVO DESAFÍO
+ * ============================================================================ */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(8, 12, 22, 0.85);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  animation: fadeIn 0.3s ease;
+}
+
+.modal-overlay.hidden {
+  display: none !important;
+}
+
+.modal-box {
+  width: 90%;
+  max-width: 480px;
+  background: rgba(15, 23, 42, 0.95);
+  border: 3px solid #38bdf8;
+  box-shadow: 0 0 40px rgba(56, 189, 248, 0.4), 0 25px 60px rgba(0, 0, 0, 0.85);
+  border-radius: 18px;
+  padding: 2rem 2.25rem;
+  text-align: center;
+  animation: modalPop 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.modal-header {
+  margin-bottom: 1.25rem;
+}
+
+.modal-title-text {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 1.1rem;
+  color: #fbbf24;
+  text-shadow: 0 2px 10px rgba(251, 191, 36, 0.5);
+  line-height: 1.4;
+  display: block;
+}
+
+.modal-msg {
+  color: #e2e8f0;
+  font-size: 0.95rem;
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+}
+
+.modal-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  text-align: left;
+  margin-bottom: 1.75rem;
+}
+
+.modal-input-group label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #94a3b8;
+}
+
+.modal-input-group input {
+  background: rgba(15, 23, 42, 0.9);
+  border: 2px solid rgba(255, 255, 255, 0.25);
+  border-radius: 8px;
+  padding: 0.85rem 1rem;
+  color: #fff;
+  font-size: 1rem;
+  font-family: 'Outfit', sans-serif;
+  transition: all var(--transition-fast);
+}
+
+.modal-input-group input:focus {
+  border-color: #38bdf8;
+  outline: none;
+  box-shadow: 0 0 15px rgba(56, 189, 248, 0.35);
+}
+
+.btn-retro-challenge {
+  width: 100%;
+  padding: 1.1rem;
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  border: 2px solid #60a5fa;
+  border-radius: 10px;
+  color: #fff;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 0 25px rgba(59, 130, 246, 0.5);
+}
+
+.btn-retro-challenge:hover {
+  background: linear-gradient(135deg, #60a5fa, #3b82f6);
+  transform: translateY(-2px);
+  box-shadow: 0 0 35px rgba(59, 130, 246, 0.8);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes modalPop {
+  from { transform: scale(0.85); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* ============================================================================
+ * 5. MARCADOR DE RACHA Y RÉCORD (STREAK SCOREBOARD)
+ * ============================================================================ */
+.streak-scoreboard {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2.5rem;
+  padding: 0.75rem 1.5rem;
+  margin-bottom: 1rem;
+  border-radius: 12px;
+  background: rgba(15, 23, 42, 0.85);
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+}
+
+.streak-badge {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.streak-current {
+  color: #38bdf8;
+}
+.streak-current strong {
+  color: #fff;
+  background: rgba(56, 189, 248, 0.2);
+  padding: 0.25rem 0.65rem;
+  border-radius: 6px;
+  border: 1px solid #38bdf8;
+}
+
+.streak-record {
+  color: #fbbf24;
+}
+.streak-record strong {
+  color: #fff;
+  background: rgba(251, 191, 36, 0.2);
+  padding: 0.25rem 0.65rem;
+  border-radius: 6px;
+  border: 1px solid #fbbf24;
+}
+
+.modal-streak-box {
+  background: rgba(8, 12, 22, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.72rem;
+}
+
+.modal-streak-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #cbd5e1;
+}
+.modal-streak-line strong {
+  color: #38bdf8;
+}
+
+.new-record-banner {
+  margin-top: 0.5rem;
+  background: linear-gradient(135deg, rgba(251, 191, 36, 0.25), rgba(245, 158, 11, 0.25));
+  border: 1px solid #fbbf24;
+  color: #fbbf24;
+  padding: 0.6rem;
+  border-radius: 8px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  text-align: center;
+  animation: recordPulse 1s infinite alternate;
+}
+
+@keyframes recordPulse {
+  from { transform: scale(0.98); box-shadow: 0 0 10px rgba(251, 191, 36, 0.4); }
+  to { transform: scale(1.02); box-shadow: 0 0 25px rgba(251, 191, 36, 0.8); }
+}
+
+/* ============================================================================
+ * 9. TEMA RADICAL NINTENDO 3DS XL (CONSOLA REALISTA 3D + PANTALLAS TÁCTILES)
+ * ============================================================================ */
+.page-layout-grid {
+  display: grid;
+  grid-template-columns: 280px 1fr 280px;
+  gap: 1.5rem;
+  max-width: 1420px;
+  margin: 0.5rem auto;
+  align-items: center;
+  padding: 0 1.5rem;
+}
+
+@media (max-width: 1150px) {
+  .page-layout-grid {
+    grid-template-columns: 1fr;
+    gap: 1.2rem;
+  }
+}
+
+.nintendo-3ds-console {
+  width: 100%;
+  max-width: 780px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.95));
+}
+
+/* SIDEBARS EXTERNOS (AFUERA DE LA 3DS) */
+.external-sidebar {
+  background: rgba(15, 23, 42, 0.92);
+  border: 2px solid #334155;
+  border-radius: 20px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.8), inset 0 1px 2px rgba(255, 255, 255, 0.15);
+  display: flex;
+  flex-direction: column;
+  height: 520px;
+  overflow: hidden;
+  transition: border-color 0.3s ease;
+}
+
+.external-sidebar:hover {
+  border-color: #38bdf8;
+}
+
+.external-sidebar .sidebar-header {
+  background: linear-gradient(135deg, #1e293b, #0f172a);
+  padding: 0.9rem 1rem;
+  border-bottom: 2px solid #334155;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.65rem;
+  color: #38bdf8;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  justify-content: center;
+  text-align: center;
+}
+
+.external-sidebar .sidebar-body {
+  padding: 1.1rem;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  overflow-y: auto;
+}
+
+/* SIDEBAR IZQUIERDA: REGISTRO DEL COMBATE */
+.external-log-viewport {
+  max-height: none;
+  height: 100%;
+}
+
+.external-log-viewport .battle-log-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+/* SIDEBAR DERECHA: SELECTOR DE POKÉMON */
+.external-setup-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  justify-content: center;
+  height: 100%;
+}
+
+.sidebar-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.sidebar-section label {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.62rem;
+  color: #94a3b8;
+  letter-spacing: 0.5px;
+}
+
+.sidebar-section input[type="text"],
+.external-setup-form input[type="text"] {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  background: rgba(8, 12, 22, 0.95);
+  border: 2px solid #334155;
+  color: #38bdf8;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 800;
+  font-size: 1rem;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.8), 0 0 10px rgba(0, 0, 0, 0.5);
+  transition: all 0.2s ease;
+}
+
+.sidebar-section input[type="text"]:focus,
+.external-setup-form input[type="text"]:focus {
+  border-color: #38bdf8;
+  color: #ffffff;
+  outline: none;
+  box-shadow: 0 0 18px rgba(56, 189, 248, 0.5), inset 0 2px 4px rgba(0, 0, 0, 0.8);
+  transform: translateY(-1px);
+}
+
+.btn-sidebar {
+  padding: 0.6rem 0.8rem;
+  background: linear-gradient(135deg, #0284c7, #0369a1);
+  color: #fff;
+  border: 1px solid #38bdf8;
+  border-radius: 8px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.55rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.btn-sidebar:hover {
+  background: linear-gradient(135deg, #38bdf8, #0284c7);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(56, 189, 248, 0.4);
+}
+
+.sidebar-divider {
+  text-align: center;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.75rem;
+  color: #f59e0b;
+  text-shadow: 0 0 10px rgba(245, 158, 11, 0.6);
+  margin: 0.2rem 0;
+}
+
+.btn-sidebar-random {
+  width: 100%;
+  padding: 0.75rem;
+  background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+  color: #fff;
+  border: 2px solid #c4b5fd;
+  border-radius: 10px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.65rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: 0.4rem;
+  box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
+}
+
+.btn-sidebar-random:hover {
+  background: linear-gradient(135deg, #a78bfa, #7c3aed);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(167, 139, 250, 0.6);
+}
+
+/* CARCASA SUPERIOR DE LA 3DS */
+.n3ds-top-half {
+  background: linear-gradient(160deg, #273449 0%, #111827 50%, #0f172a 100%);
+  border-radius: 32px 32px 8px 8px;
+  border: 4px solid #475569;
+  border-bottom: none;
+  padding: 0.7rem 1.8rem 0.8rem 1.8rem;
+  box-shadow: 
+    inset 0 4px 10px rgba(255, 255, 255, 0.15),
+    inset 0 -5px 15px rgba(0, 0, 0, 0.8);
+  position: relative;
+}
+
+/* BARRA DE CÁMARAS Y ALTAVOCES SUPERIOR */
+.n3ds-camera-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2.5rem;
+  margin-bottom: 0.4rem;
+  position: relative;
+}
+
+.n3ds-speaker {
+  width: 35px;
+  height: 5px;
+  background: repeating-linear-gradient(
+    90deg,
+    #64748b 0px,
+    #64748b 4px,
+    transparent 4px,
+    transparent 8px
+  );
+  border-radius: 4px;
+  opacity: 0.7;
+}
+
+.n3ds-camera {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #38bdf8 0%, #0f172a 60%, #000 100%);
+  border: 2px solid #334155;
+  box-shadow: 0 0 8px rgba(56, 189, 248, 0.4);
+}
+
+.n3ds-3d-slider {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.55rem;
+  color: #10b981;
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid #10b981;
+  padding: 0.15rem 0.4rem;
+  border-radius: 6px;
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.4);
+  letter-spacing: 1px;
+}
+
+/* MARCADOR DE RACHAS EN EL MARCO SUPERIOR DE LA 3DS */
+.3ds-streak-bar {
+  margin: 0 0 0.5rem 0;
+  padding: 0.4rem 1rem;
+  border-radius: 8px;
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid #334155;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+/* PANTALLAS MARCO INTERNO */
+.n3ds-screen {
+  background: #020617;
+  border-radius: 14px;
+  padding: 8px;
+  border: 3px solid #1e293b;
+  box-shadow: inset 0 0 25px rgba(0, 0, 0, 0.9);
+}
+
+.n3ds-top-screen {
+  border-color: #334155;
+}
+
+/* BISAGRA CILÍNDRICA 3DS (HINGE) */
+.n3ds-hinge {
+  height: 22px;
+  background: linear-gradient(180deg, #090d16 0%, #475569 35%, #1e293b 65%, #090d16 100%);
+  border-left: 4px solid #475569;
+  border-right: 4px solid #475569;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 3.5rem;
+  position: relative;
+  z-index: 10;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.7);
+}
+
+.hinge-left, .hinge-right {
+  width: 20px;
+  height: 8px;
+  background: #0f172a;
+  border-radius: 4px;
+  border: 1px solid #334155;
+}
+
+.hinge-leds {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.led-indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
+.led-wifi {
+  background: #10b981;
+  box-shadow: 0 0 10px #10b981, 0 0 20px #10b981;
+}
+.led-power {
+  background: #38bdf8;
+  box-shadow: 0 0 10px #38bdf8, 0 0 20px #38bdf8;
+}
+.led-battery {
+  background: #f59e0b;
+  box-shadow: 0 0 10px #f59e0b, 0 0 20px #f59e0b;
+}
+
+/* CARCASA INFERIOR DE LA 3DS CON D-PAD Y BOTONES ABXY */
+.n3ds-bottom-half {
+  background: linear-gradient(160deg, #1e293b 0%, #111827 50%, #090d16 100%);
+  border-radius: 12px 12px 36px 36px;
+  border: 4px solid #475569;
+  border-top: none;
+  padding: 0.8rem 1.4rem 1.2rem 1.4rem;
+  box-shadow: 
+    inset 0 -8px 20px rgba(255, 255, 255, 0.08),
+    inset 0 4px 15px rgba(0, 0, 0, 0.8);
+  display: grid;
+  grid-template-columns: 85px 1fr 85px;
+  align-items: center;
+  gap: 1.2rem;
+}
+
+/* D-PAD (CRUZ DE NINTENDO) */
+.n3ds-dpad-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.n3ds-dpad {
+  position: relative;
+  width: 75px;
+  height: 75px;
+}
+
+.dpad-arm {
+  position: absolute;
+  background: linear-gradient(145deg, #334155, #1e293b);
+  border: 2px solid #0f172a;
+  box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.2);
+}
+
+.dpad-up {
+  top: 0; left: 25px; width: 25px; height: 28px;
+  border-radius: 5px 5px 0 0;
+}
+.dpad-down {
+  bottom: 0; left: 25px; width: 25px; height: 28px;
+  border-radius: 0 0 5px 5px;
+}
+.dpad-left {
+  left: 0; top: 25px; width: 28px; height: 25px;
+  border-radius: 5px 0 0 5px;
+}
+.dpad-right {
+  right: 0; top: 25px; width: 28px; height: 25px;
+  border-radius: 0 5px 5px 0;
+}
+.dpad-center {
+  position: absolute;
+  top: 25px; left: 25px;
+  width: 25px; height: 25px;
+  background: #1e293b;
+  border: none;
+}
+
+/* BOTONES A, B, X, Y DE NINTENDO */
+.n3ds-abxy-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.n3ds-abxy {
+  position: relative;
+  width: 85px;
+  height: 85px;
+}
+
+.abxy-btn {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: #fff;
+  border: 2px solid #0f172a;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6), inset 0 2px 3px rgba(255, 255, 255, 0.35);
+  cursor: pointer;
+  transition: transform 0.1s ease;
+}
+.abxy-btn:active {
+  transform: scale(0.9);
+}
+.btn-x { top: 0; left: 28px; background: #3b82f6; }
+.btn-a { top: 28px; right: 0; background: #ef4444; }
+.btn-y { top: 28px; left: 0; background: #10b981; }
+.btn-b { bottom: 0; left: 28px; background: #eab308; color: #1a1a1a; }
+
+/* PANTALLA TÁCTIL INFERIOR (TOUCHSCREEN) */
+/* PANTALLA TÁCTIL INFERIOR (TOUCHSCREEN - MISMA ALTURA DE 300PX QUE LA PANTALLA SUPERIOR) */
+.n3ds-touchscreen {
+  border-color: #38bdf8;
+  box-shadow: 0 0 30px rgba(56, 189, 248, 0.2), inset 0 0 20px rgba(0, 0, 0, 0.9);
+  padding: 0.8rem 1rem;
+  height: 300px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* CUERPO DEL TOUCHSCREEN */
+.touchscreen-body {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.touch-form {
+  height: 100%;
+}
+
+.touch-menu-section {
+  padding: 1rem 1.2rem;
+  background: rgba(15, 23, 42, 0.85);
+  border-radius: 12px;
+  border: 1px solid #334155;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* TÍTULO CENTRADO "ELIGE TU ATAQUE" */
+.centered-tab {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+  margin-bottom: 0.6rem;
+  border-bottom: 1px dashed #334155;
+  padding-bottom: 0.5rem;
+}
+
+.centered-tab .menu-tab {
+  width: 100%;
+  text-align: center;
+  cursor: default;
+}
+
+.centered-title {
+  display: inline-block;
+  width: 100%;
+  text-align: center;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.78rem;
+  color: #38bdf8;
+  text-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
+  letter-spacing: 1px;
+}
+
+.touch-menu-section .custom-input-row {
+  display: none; /* Ocultamos el campo de texto redundante en la pantalla táctil 3DS */
+}
+
+.touch-moves-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: 1fr 1fr;
+  gap: 0.8rem;
+  margin-top: 0.2rem;
+  flex-grow: 1;
+}
+
+.touch-moves-grid .move-btn {
+  padding: 1rem 0.8rem;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #1e293b, #0f172a);
+  border: 2px solid #38bdf8;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5), inset 0 1px 2px rgba(255, 255, 255, 0.2);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.touch-moves-grid .move-btn:hover {
+  transform: translateY(-2px) scale(1.01);
+  border-color: #34d399;
+  box-shadow: 0 6px 18px rgba(52, 211, 153, 0.4);
+}
+.touch-moves-grid .move-btn.selected {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  border-color: #60a5fa;
+  box-shadow: 0 0 15px rgba(96, 165, 250, 0.6);
+}
+
+/* PIE DE PÁGINA */
+.app-footer.3ds-footer {
+  text-align: center;
+  color: #94a3b8;
+  font-size: 0.72rem;
+  margin-top: 0.4rem;
+  padding-bottom: 0.5rem;
+  font-weight: 600;
+}

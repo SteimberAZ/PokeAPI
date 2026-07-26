@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PokéBattle Arena | Videojuego Clásico Cliente-Servidor</title>
+  <meta name="description" content="Simulador de combate estilo videojuego clásico Pokémon (Game Boy Advance / Nintendo DS) con arquitectura Cliente-Servidor en Node.js y PokéAPI.">
+  <!-- Fuentes modernas y clásicas de videojuegos -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css?v=19">
+</head>
+<body>
+  <div class="bg-glow bg-glow-1"></div>
+  <div class="bg-glow bg-glow-2"></div>
+
+  <div class="page-layout-grid">
+    
+    <!-- COLUMNA IZQUIERDA (AFUERA DE LA 3DS): REGISTRO DEL COMBATE -->
+    <aside class="external-sidebar left-sidebar glass-card">
+      <div class="sidebar-header">
+        <span class="dialogue-icon">💬</span>
+        <span>REGISTRO DE COMBATE</span>
+      </div>
+      <div class="sidebar-body log-container external-log-viewport">
+        <ul id="battle-log-list" class="battle-log-list">
+          <li class="log-item log-system">
+            <span class="log-time">[SISTEMA]</span>
+            <span class="log-text">🔥 ¡Nintendo 3DS en línea! Toca un ataque para combatir.</span>
+          </li>
+        </ul>
+      </div>
+    </aside>
+
+    <!-- COLUMNA CENTRAL: LA CONSOLA NINTENDO 3DS XL -->
+    <main class="nintendo-3ds-console">
+      <!-- PANTALLA SUPERIOR 3DS (TOP SCREEN - WIDESCREEN 3D BATTLE ARENA) -->
+      <div class="n3ds-top-half">
+        <div class="n3ds-camera-bar">
+          <span class="n3ds-speaker"></span>
+          <span class="n3ds-camera"></span>
+          <span class="n3ds-speaker"></span>
+          <div class="n3ds-3d-slider">3D MAX</div>
+        </div>
+
+        <!-- MARCADOR RETRO DE RACHAS EN EL BISEL SUPERIOR -->
+        <div class="streak-scoreboard 3ds-streak-bar">
+          <div class="streak-badge streak-current">
+            <span>🔥 RACHA ACTUAL: </span>
+            <strong id="streak-current-val">0</strong>
+          </div>
+          <div class="streak-badge streak-record">
+            <span>👑 RÉCORD MÁXIMO: </span>
+            <strong id="streak-record-val">0</strong>
+          </div>
+        </div>
+
+        <!-- PANTALLA PRINCIPAL WIDESCREEN (ARENA DE BATALLA) -->
+        <div class="n3ds-screen n3ds-top-screen">
+          <!-- Contenedor de Error 404 Visual -->
+          <div id="error-banner" class="error-banner hidden" role="alert" aria-live="assertive">
+            <div class="error-icon">⚠️</div>
+            <div class="error-content">
+              <strong id="error-title">Error en el servidor</strong>
+              <p id="error-message">Mensaje de error...</p>
+            </div>
+            <button type="button" id="close-error-btn" class="close-error-btn" aria-label="Cerrar error">&times;</button>
+          </div>
+
+          <!-- ESCENARIO DE BATALLA ESTILO VIDEOJUEGO CLÁSICO (STADIUM ARENA) -->
+          <section class="stadium-arena">
+            <div class="stadium-bg">
+              
+              <!-- POKÉMON RIVAL (Arriba a la Derecha - Sprite Frontal) -->
+              <div class="rival-area">
+                <div class="game-hp-box rival-hp-box glass-card">
+                  <div class="hp-box-top">
+                    <span id="rival-name" class="pkm-name">BLASTOISE</span>
+                    <span class="pkm-lvl">Lv50</span>
+                  </div>
+                  <div id="rival-types" class="types-container">
+                    <span class="type-badge type-water">water</span>
+                  </div>
+                  <div class="hp-bar-row">
+                    <span class="hp-label">HP</span>
+                    <progress id="rival-hp-bar" class="hp-bar" value="200" max="200"></progress>
+                  </div>
+                  <div class="hp-numbers-row">
+                    <span id="rival-hp-text" class="hp-numbers">200 / 200</span>
+                  </div>
+                </div>
+
+                <div class="sprite-stage rival-stage">
+                  <img id="rival-sprite" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/9.gif" alt="Sprite Rival" class="pokemon-sprite front-sprite">
+                </div>
+              </div>
+
+              <!-- TU POKÉMON (Abajo a la Izquierda - Sprite de Espalda en batalla) -->
+              <div class="player-area">
+                <div class="sprite-stage player-stage">
+                  <img id="my-sprite" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/back/6.gif" alt="Sprite Tu Pokémon" class="pokemon-sprite back-sprite">
+                </div>
+
+                <div class="game-hp-box player-hp-box glass-card">
+                  <div class="hp-box-top">
+                    <span id="my-name" class="pkm-name">CHARIZARD</span>
+                    <span class="pkm-lvl">Lv50</span>
+                  </div>
+                  <div id="my-types" class="types-container">
+                    <span class="type-badge type-fire">fire</span>
+                    <span class="type-badge type-flying">flying</span>
+                  </div>
+                  <div class="hp-bar-row">
+                    <span class="hp-label">HP</span>
+                    <progress id="my-hp-bar" class="hp-bar" value="200" max="200"></progress>
+                  </div>
+                  <div class="hp-numbers-row">
+                    <span id="my-hp-text" class="hp-numbers">200 / 200</span>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </section>
+        </div>
+      </div>
+
+      <!-- BISAGRA CILÍNDRICA CON INDICADORES LED (3DS HINGE) -->
+      <div class="n3ds-hinge">
+        <div class="hinge-left"></div>
+        <div class="hinge-leds">
+          <span class="led-indicator led-wifi" title="Wi-Fi: Conectado a Servidor Node/Express"></span>
+          <span class="led-indicator led-power" title="Power: ON"></span>
+          <span class="led-indicator led-battery" title="Batería: 100%"></span>
+        </div>
+        <div class="hinge-right"></div>
+      </div>
+
+      <!-- PANTALLA INFERIOR TÁCTIL 3DS CON D-PAD Y BOTONES ABXY (BOTTOM TOUCH SCREEN) -->
+      <div class="n3ds-bottom-half">
+        <!-- D-PAD DE LA NINTENDO 3DS (IZQUIERDA) -->
+        <div class="n3ds-dpad-wrapper">
+          <div class="n3ds-dpad">
+            <span class="dpad-arm dpad-up"></span>
+            <span class="dpad-arm dpad-right"></span>
+            <span class="dpad-arm dpad-down"></span>
+            <span class="dpad-arm dpad-left"></span>
+            <span class="dpad-center"></span>
+          </div>
+        </div>
+
+        <!-- PANTALLA TÁCTIL CENTRAL (TOUCHSCREEN - SOLO BOTONES DE ATAQUE) -->
+        <div class="n3ds-screen n3ds-touchscreen">
+          <section class="touchscreen-body">
+            <form id="battle-form" class="command-form touch-form">
+              <div class="touch-menu-section glass-card">
+                <!-- TÍTULO CENTRADO -->
+                <div class="menu-tabs centered-tab">
+                  <label class="menu-tab active" id="tab-attack">
+                    <input type="radio" name="actionType" value="attack" checked>
+                    <span class="tab-label centered-title">⚔️ ELIGE TU ATAQUE ⚔️</span>
+                  </label>
+                </div>
+
+                <!-- SUBMENÚ 1: MOVIMIENTOS DE LUCHA (ATAQUE) -->
+                <div id="attack-submenu" class="submenu-container">
+                  <div id="moves-grid" class="game-grid-buttons touch-moves-grid">
+                    <button type="button" class="game-btn move-btn" data-move="flamethrower">
+                      <span class="btn-title">LANZALLAMAS</span>
+                      <span class="btn-sub">flamethrower</span>
+                    </button>
+                    <button type="button" class="game-btn move-btn" data-move="thunderbolt">
+                      <span class="btn-title">RAYO</span>
+                      <span class="btn-sub">thunderbolt</span>
+                    </button>
+                    <button type="button" class="game-btn move-btn" data-move="tackle">
+                      <span class="btn-title">PLACAJES</span>
+                      <span class="btn-sub">tackle</span>
+                    </button>
+                    <button type="button" class="game-btn move-btn" data-move="dragon-claw">
+                      <span class="btn-title">GARRA DRAGÓN</span>
+                      <span class="btn-sub">dragon-claw</span>
+                    </button>
+                  </div>
+                  <div class="custom-input-row">
+                    <label for="moveName">Movimiento seleccionado (/move & /type):</label>
+                    <input type="text" id="moveName" name="moveName" value="flamethrower" required autocomplete="off">
+                  </div>
+                </div>
+
+                <!-- Compatibilidad: Input oculto de objeto -->
+                <input type="hidden" id="itemName" name="itemName" value="potion">
+                <div id="heal-submenu" class="hidden"></div>
+                <div id="tab-heal" class="hidden"></div>
+              </div>
+            </form>
+          </section>
+        </div>
+
+        <!-- BOTONES A, B, X, Y DE LA NINTENDO 3DS (DERECHA) -->
+        <div class="n3ds-abxy-wrapper">
+          <div class="n3ds-abxy">
+            <span class="abxy-btn btn-x">X</span>
+            <span class="abxy-btn btn-y">Y</span>
+            <span class="abxy-btn btn-a">A</span>
+            <span class="abxy-btn btn-b">B</span>
+          </div>
+        </div>
+      </div>
+
+
+    </main>
+
+    <!-- COLUMNA DERECHA (AFUERA DE LA 3DS): SELECTOR DE POKÉMON -->
+    <aside class="external-sidebar right-sidebar glass-card">
+      <div class="sidebar-header">
+        <span class="dialogue-icon">🎮</span>
+        <span>ELEGIR POKÉMON</span>
+      </div>
+      <div class="sidebar-body">
+        <form id="setup-form" class="external-setup-form" onsubmit="return false;">
+          <div class="sidebar-section">
+            <label for="myPokemon">TU POKÉMON:</label>
+            <input type="text" id="myPokemon" name="myPokemon" value="charizard" placeholder="charizard..." autocomplete="off">
+          </div>
+
+          <div class="sidebar-divider">VS</div>
+
+          <div class="sidebar-section">
+            <label for="rivalPokemon">POKÉMON RIVAL:</label>
+            <input type="text" id="rivalPokemon" name="rivalPokemon" value="blastoise" placeholder="blastoise..." autocomplete="off">
+            <button type="button" id="btn-random-rival" class="btn-sidebar-random" title="Generar un rival sorpresa desde el servidor Express">
+              <span>🎲 Rival Aleatorio</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </aside>
+
+  </div>
+
+  <!-- MINI MODAL RETRO: FIN DE COMBATE Y NUEVO DESAFÍO -->
+  <div id="battle-modal" class="modal-overlay hidden">
+    <div class="modal-box glass-card retro-border">
+      <div class="modal-header">
+        <span id="modal-title" class="modal-title-text">🏆 ¡VICTORIA COMBATE!</span>
+      </div>
+      <div class="modal-body">
+        <p id="modal-message" class="modal-msg">Has derrotado al rival en la arena de combate.</p>
+        
+        <!-- RESUMEN RETRO DE RACHA Y RÉCORD EN LA MODAL -->
+        <div id="modal-streak-box" class="modal-streak-box">
+          <div class="modal-streak-line">
+            <span>🔥 Racha actual: </span><strong id="modal-streak-val">0</strong>
+          </div>
+          <div class="modal-streak-line">
+            <span>👑 Récord máximo: </span><strong id="modal-record-val">0</strong>
+          </div>
+          <div id="modal-new-record-banner" class="new-record-banner hidden">
+            <span>🎉 ¡NUEVO RÉCORD DE VICTORIAS!</span>
+          </div>
+        </div>
+
+        <div class="modal-input-group">
+          <label for="next-pokemon-input">¿Qué Pokémon usarás en la siguiente batalla? (En blanco = mismo):</label>
+          <input type="text" id="next-pokemon-input" placeholder="Ej. blastoise, pikachu, gengar..." autocomplete="off">
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" id="btn-new-challenge" class="btn-retro-challenge">
+            <span>✨ NUEVO DESAFÍO (RIVAL ALEATORIO)</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js?v=11"></script>
+</body>
+</html>

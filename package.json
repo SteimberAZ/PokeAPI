@@ -1,0 +1,23 @@
+{
+  "name": "pokemon-battle-simulator",
+  "version": "1.0.0",
+  "description": "Simulador de Batalla Pokémon Cliente-Servidor consumiendo la PokéAPI (Node.js + Express + HTML/CSS/Vanilla JS)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "keywords": [
+    "pokemon",
+    "pokeapi",
+    "express",
+    "nodejs",
+    "university"
+  ],
+  "author": "Estudiante Universitario",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2"
+  }
+}
