@@ -348,20 +348,16 @@ document.addEventListener('DOMContentLoaded', () => {
   function renderTurnSequence(data) {
     const { myPokemon, rivalPokemon, turnResult } = data;
 
-    // Actualizar datos generales y medallas
-    updatePokemonCard({ prefix: 'my', pokemon: myPokemon, isPlayer: true });
-    updatePokemonCard({ prefix: 'rival', pokemon: rivalPokemon, isPlayer: false });
-
-    // PASO 1: TU ACCIÓN
-    // Si fue curación, mostramos primero la salud recuperada antes de recibir el contraataque
+    // Determinar la vida intermedia del jugador tras usar la poción
     const step1MyHp = (turnResult.playerAction.action === 'heal' && turnResult.playerAction.intermediateMyHp !== undefined)
       ? turnResult.playerAction.intermediateMyHp
       : myPokemon.currentHp;
 
-    battleState.myHp = step1MyHp;
-    battleState.rivalHp = rivalPokemon.currentHp;
-    updateHpBar('my', { ...myPokemon, currentHp: step1MyHp });
-    updateHpBar('rival', rivalPokemon);
+    const step1MyPokemon = { ...myPokemon, currentHp: step1MyHp };
+
+    // Actualizar datos generales y medallas del paso 1
+    updatePokemonCard({ prefix: 'my', pokemon: step1MyPokemon, isPlayer: true });
+    updatePokemonCard({ prefix: 'rival', pokemon: rivalPokemon, isPlayer: false });
 
     triggerSpriteAnimations(turnResult.playerAction.action, false);
     appendLogItem(turnResult.playerAction.action, turnResult.playerAction.logMessage);
@@ -377,7 +373,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         checkWinner(turnResult.winner);
         setLoadingState(false);
-      }, 750);
+      }, 1500); // 1.5 segundos para que la curación se visualice claramente
     } else {
       battleState.myHp = myPokemon.currentHp;
       updateHpBar('my', myPokemon);
