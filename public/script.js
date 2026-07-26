@@ -352,10 +352,15 @@ document.addEventListener('DOMContentLoaded', () => {
     updatePokemonCard({ prefix: 'my', pokemon: myPokemon, isPlayer: true });
     updatePokemonCard({ prefix: 'rival', pokemon: rivalPokemon, isPlayer: false });
 
-    // PASO 1: TU ACCIÓN (Actualizar las barras de HP de ambos según corresponda)
-    battleState.myHp = myPokemon.currentHp;
+    // PASO 1: TU ACCIÓN
+    // Si fue curación, mostramos primero la salud recuperada antes de recibir el contraataque
+    const step1MyHp = (turnResult.playerAction.action === 'heal' && turnResult.playerAction.intermediateMyHp !== undefined)
+      ? turnResult.playerAction.intermediateMyHp
+      : myPokemon.currentHp;
+
+    battleState.myHp = step1MyHp;
     battleState.rivalHp = rivalPokemon.currentHp;
-    updateHpBar('my', myPokemon);
+    updateHpBar('my', { ...myPokemon, currentHp: step1MyHp });
     updateHpBar('rival', rivalPokemon);
 
     triggerSpriteAnimations(turnResult.playerAction.action, false);
@@ -597,7 +602,7 @@ document.addEventListener('DOMContentLoaded', () => {
       btnPotion.classList.remove('disabled');
       btnPotion.innerHTML = `
         <span class="btn-title">🧪 MOCHILA: USAR POCIÓN (+30 HP)</span>
-        <span class="btn-sub">1 uso por combate • PokéAPI /item</span>
+        <span class="btn-sub">1 uso por combate</span>
       `;
     }
   }

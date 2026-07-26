@@ -301,6 +301,8 @@ app.post('/api/battle', async (req, res) => {
     let rivalLogMessage = null;
     let winner = null;
 
+    let intermediateMyHp = myPokemon.currentHp;
+
     // ========================================================================
     // TURNO 1: ACCIÓN DEL JUGADOR
     // ========================================================================
@@ -334,8 +336,9 @@ app.post('/api/battle', async (req, res) => {
       const hpBefore = myPokemon.currentHp;
       myPokemon.currentHp = Math.min(myPokemon.maxHp, myPokemon.currentHp + itemData.healAmount);
       const recovered = myPokemon.currentHp - hpBefore;
+      intermediateMyHp = myPokemon.currentHp;
 
-      playerLogMessage = `🧪 ¡Utilizaste [${itemData.name.toUpperCase()}]! ${myPokemon.name.toUpperCase()} recuperó ${recovered} HP (${myPokemon.currentHp}/${myPokemon.maxHp}).`;
+      playerLogMessage = `🧪 ¡Utilizaste [${itemData.name.toUpperCase()}]! ${myPokemon.name.toUpperCase()} recuperó +${recovered} HP (${myPokemon.currentHp}/${myPokemon.maxHp}).`;
     }
 
     if (rivalPokemon.currentHp === 0) {
@@ -373,7 +376,8 @@ app.post('/api/battle', async (req, res) => {
       turnResult: {
         playerAction: {
           action: actionType,
-          logMessage: playerLogMessage
+          logMessage: playerLogMessage,
+          intermediateMyHp: intermediateMyHp
         },
         rivalAction: rivalLogMessage ? {
           action: 'counterattack',
