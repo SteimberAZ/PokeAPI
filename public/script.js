@@ -391,6 +391,22 @@ document.addEventListener('DOMContentLoaded', () => {
       spriteEl.src = targetSprite;
     }
 
+    // Inyectar datos del Endpoint 2 (/pokemon-species) al pasar el mouse por encima
+    if (pokemon.speciesInfo) {
+      const categoryText = pokemon.speciesInfo.category || 'Pokémon';
+      const descText = pokemon.speciesInfo.description || 'Sin descripción Pokédex disponible.';
+      const tooltipText = `📖 Pokédex: ${categoryText.toUpperCase()}\n"${descText}"`;
+
+      spriteEl.title = tooltipText;
+
+      const hpBox = document.querySelector(`.${prefix === 'my' ? 'player' : 'rival'}-hp-box`);
+      if (hpBox) {
+        hpBox.title = tooltipText;
+        hpBox.setAttribute('data-species', categoryText);
+        hpBox.setAttribute('data-description', descText);
+      }
+    }
+
     const typesContainer = document.getElementById(`${prefix}-types`);
     typesContainer.innerHTML = '';
     pokemon.types.forEach(type => {

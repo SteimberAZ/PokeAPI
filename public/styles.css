@@ -234,6 +234,13 @@ body {
   background: rgba(15, 23, 42, 0.88);
   border: 1.5px solid rgba(255, 255, 255, 0.2);
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
+  cursor: help;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.game-hp-box:hover {
+  transform: translateY(-2px);
+  border-color: #38bdf8;
 }
 
 .rival-hp-box {
