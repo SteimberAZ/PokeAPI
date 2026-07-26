@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Press+Start+2P&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=19">
+  <link rel="stylesheet" href="styles.css?v=20">
 </head>
 <body>
   <div class="bg-glow bg-glow-1"></div>
@@ -163,7 +163,7 @@
                   </label>
                 </div>
 
-                <!-- SUBMENÚ 1: MOVIMIENTOS DE LUCHA (ATAQUE) -->
+                <!-- SUBMENÚ 1: MOVIMIENTOS DE LUCHA (ATAQUE) Y MOCHILA DE CURACIÓN -->
                 <div id="attack-submenu" class="submenu-container">
                   <div id="moves-grid" class="game-grid-buttons touch-moves-grid">
                     <button type="button" class="game-btn move-btn" data-move="flamethrower">
@@ -183,6 +183,15 @@
                       <span class="btn-sub">dragon-claw</span>
                     </button>
                   </div>
+                  
+                  <!-- BOTÓN MOCHILA: CURAR CON POCIÓN (1 USO POR DUELO - ENDPOINT /ITEM) -->
+                  <div class="touch-potion-wrapper">
+                    <button type="button" id="btn-use-potion" class="game-btn item-btn touch-potion-btn" data-item="potion">
+                      <span class="btn-title">🧪 MOCHILA: USAR POCIÓN (+30 HP)</span>
+                      <span class="btn-sub">1 uso por combate • PokéAPI /item</span>
+                    </button>
+                  </div>
+
                   <div class="custom-input-row">
                     <label for="moveName">Movimiento seleccionado (/move & /type):</label>
                     <input type="text" id="moveName" name="moveName" value="flamethrower" required autocomplete="off">

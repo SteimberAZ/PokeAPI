@@ -1395,6 +1395,45 @@ body {
   box-shadow: 0 0 15px rgba(96, 165, 250, 0.6);
 }
 
+/* BOTÓN DE POCIÓN / MOCHILA INFERIOR */
+.touch-potion-wrapper {
+  margin-top: 0.5rem;
+  width: 100%;
+}
+
+.touch-potion-btn {
+  width: 100%;
+  padding: 0.65rem 0.8rem;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #059669, #047857);
+  border: 2px solid #34d399;
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.35);
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.touch-potion-btn:hover:not(:disabled) {
+  background: linear-gradient(135deg, #10b981, #059669);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(52, 211, 153, 0.5);
+}
+
+.touch-potion-btn:disabled,
+.touch-potion-btn.disabled {
+  background: linear-gradient(135deg, #334155, #1e293b);
+  border-color: #475569;
+  color: #94a3b8;
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
 /* PIE DE PÁGINA */
 .app-footer.3ds-footer {
   text-align: center;

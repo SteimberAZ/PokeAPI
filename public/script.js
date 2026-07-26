@@ -144,9 +144,11 @@ document.addEventListener('DOMContentLoaded', () => {
     fetchRandomRival();
   });
 
+  let hasUsedPotionInBattle = false;
+
   /**
    * 2. DELEGACIÓN DE EVENTOS GLOBAL PARA ATAQUES Y POCIONES (100% FIABLE)
-   * Permite cambiar o hacer clic sobre cualquier ataque en la pantalla.
+   * Permite cambiar o hacer clic sobre cualquier ataque o la poción en la pantalla.
    */
   document.addEventListener('click', (e) => {
     // CLIC EN BOTÓN DE ATAQUE (.move-btn)
@@ -158,17 +160,36 @@ document.addEventListener('DOMContentLoaded', () => {
         moveBtn.classList.add('selected');
         moveNameInput.value = move;
         
-        // Activar pestaña LUCHA
+        // Activar tipo de acción ATAQUE
         const radioAttack = document.querySelector('input[name="actionType"][value="attack"]');
         if (radioAttack) radioAttack.checked = true;
-        if (tabAttack) tabAttack.classList.add('active');
-        if (tabHeal) tabHeal.classList.remove('active');
-        if (attackSubmenu) attackSubmenu.classList.remove('hidden');
-        if (healSubmenu) healSubmenu.classList.add('hidden');
         
         // ¡EJECUCIÓN INMEDIATA DEL TURNO!
         executeBattleTurn();
       }
+      return;
+    }
+
+    // CLIC EN BOTÓN DE POCIÓN/MOCHILA (.item-btn)
+    const itemBtn = e.target.closest('.item-btn');
+    if (itemBtn && !itemBtn.disabled && !hasUsedPotionInBattle) {
+      const item = itemBtn.getAttribute('data-item') || 'potion';
+      hasUsedPotionInBattle = true;
+      itemBtn.disabled = true;
+      itemBtn.classList.add('disabled');
+      itemBtn.innerHTML = `
+        <span class="btn-title">🧪 POCIÓN UTILIZADA (Agotada)</span>
+        <span class="btn-sub">Mochila vacía durante este combate</span>
+      `;
+
+      itemNameInput.value = item;
+
+      // Activar tipo de acción CURAR
+      const radioHeal = document.querySelector('input[name="actionType"][value="heal"]');
+      if (radioHeal) radioHeal.checked = true;
+
+      // ¡EJECUCIÓN INMEDIATA DEL TURNO DE CURACIÓN!
+      executeBattleTurn();
       return;
     }
   });
@@ -573,6 +594,17 @@ document.addEventListener('DOMContentLoaded', () => {
     battleState.rivalHp = undefined;
     battleState.isBattleOver = false;
     battleState.isProcessingTurn = false;
+    hasUsedPotionInBattle = false;
+
+    const btnPotion = document.getElementById('btn-use-potion');
+    if (btnPotion) {
+      btnPotion.disabled = false;
+      btnPotion.classList.remove('disabled');
+      btnPotion.innerHTML = `
+        <span class="btn-title">🧪 MOCHILA: USAR POCIÓN (+30 HP)</span>
+        <span class="btn-sub">1 uso por combate • PokéAPI /item</span>
+      `;
+    }
   }
 
   function setLoadingState(isLoading) {
