@@ -160,12 +160,8 @@ document.addEventListener('DOMContentLoaded', () => {
         moveBtn.classList.add('selected');
         moveNameInput.value = move;
         
-        // Activar tipo de acción ATAQUE
-        const radioAttack = document.querySelector('input[name="actionType"][value="attack"]');
-        if (radioAttack) radioAttack.checked = true;
-        
-        // ¡EJECUCIÓN INMEDIATA DEL TURNO!
-        executeBattleTurn();
+        // ¡EJECUCIÓN INMEDIATA DEL TURNO DE ATAQUE!
+        executeBattleTurn('attack');
       }
       return;
     }
@@ -184,12 +180,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
       itemNameInput.value = item;
 
-      // Activar tipo de acción CURAR
-      const radioHeal = document.querySelector('input[name="actionType"][value="heal"]');
-      if (radioHeal) radioHeal.checked = true;
-
       // ¡EJECUCIÓN INMEDIATA DEL TURNO DE CURACIÓN!
-      executeBattleTurn();
+      executeBattleTurn('heal');
       return;
     }
   });
@@ -301,10 +293,10 @@ document.addEventListener('DOMContentLoaded', () => {
    */
   battleForm.addEventListener('submit', (e) => {
     e.preventDefault();
-    executeBattleTurn();
+    executeBattleTurn('attack');
   });
 
-  async function executeBattleTurn() {
+  async function executeBattleTurn(actionOverride = 'attack') {
     hideError();
 
     if (battleState.isBattleOver) {
@@ -320,9 +312,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const payload = {
       myPokemon: myInput.value.trim(),
       rivalPokemon: rivalInput.value.trim(),
-      actionType: document.querySelector('input[name="actionType"]:checked').value,
+      actionType: actionOverride,
       moveName: moveNameInput.value.trim(),
-      itemName: itemNameInput.value.trim(),
+      itemName: itemNameInput.value.trim() || 'potion',
       myCurrentHp: battleState.myHp,
       rivalCurrentHp: battleState.rivalHp
     };
@@ -356,15 +348,18 @@ document.addEventListener('DOMContentLoaded', () => {
   function renderTurnSequence(data) {
     const { myPokemon, rivalPokemon, turnResult } = data;
 
+    // Actualizar datos generales y medallas
     updatePokemonCard({ prefix: 'my', pokemon: myPokemon, isPlayer: true });
     updatePokemonCard({ prefix: 'rival', pokemon: rivalPokemon, isPlayer: false });
 
-    // PASO 1: TU ACCIÓN
+    // PASO 1: TU ACCIÓN (Actualizar las barras de HP de ambos según corresponda)
+    battleState.myHp = myPokemon.currentHp;
+    battleState.rivalHp = rivalPokemon.currentHp;
+    updateHpBar('my', myPokemon);
+    updateHpBar('rival', rivalPokemon);
+
     triggerSpriteAnimations(turnResult.playerAction.action, false);
     appendLogItem(turnResult.playerAction.action, turnResult.playerAction.logMessage);
-
-    battleState.rivalHp = rivalPokemon.currentHp;
-    updateHpBar('rival', rivalPokemon);
 
     // PASO 2: CONTRAATAQUE DEL RIVAL O FIN DE COMBATE
     if (turnResult.rivalAction) {
